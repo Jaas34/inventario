@@ -36,7 +36,11 @@
                                     Acciones
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Detalle</a></li>
+                                    <li>
+                                        <router-link :to="{name: 'Show', params: {id: product.id}}">
+                                            <a class="dropdown-item" href="#">Detalle</a>
+                                        </router-link>
+                                    </li>
                                     <li><a class="dropdown-item" href="#">Editar</a></li>
                                     <li><a class="dropdown-item" href="#">Cambiar existencia</a></li>
                                     <li><a class="dropdown-item" href="#">Eliminar</a></li>
