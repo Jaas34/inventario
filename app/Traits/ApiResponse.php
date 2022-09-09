@@ -24,7 +24,7 @@ trait ApiResponse {
         if ($validator->fails())
             throw new HttpResponseException(
                 $this->errorResponse(
-                    'No se pudo realizar la acción', ['errors' => $validator->errors()->toArray()], JsonResponse::HTTP_BAD_REQUEST)
+                    'No se pudo realizar la acción', ['errors' => $validator->errors()->toArray()])
             );
     }
 

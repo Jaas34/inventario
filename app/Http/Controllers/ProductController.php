@@ -60,9 +60,16 @@ class ProductController extends Controller
         //
     }
 
-    public function destroy($id)
+    /**
+     * Delete product
+     * @param Product $product
+     * @return JsonResponse
+     */
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return $this->successResponse('Acción realizada con éxito');
     }
 
     /**

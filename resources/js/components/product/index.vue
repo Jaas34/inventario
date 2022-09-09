@@ -45,7 +45,7 @@
                                     </li>
                                     <li><a class="dropdown-item" href="#">Editar</a></li>
                                     <li><a class="dropdown-item" :class="{ disabled : !product.stock }" href="#" v-on:click="setAvailability(product.id)">Marcar sin inventario</a></li>
-                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                    <li><a class="dropdown-item" href="#" v-on:click="deleteProduct(product.id)">Eliminar</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -71,7 +71,8 @@ export default {
     },
     data() {
         return {
-            products: {}
+            products: {},
+            currentPage: 1
         }
     },
     mounted() {
@@ -79,20 +80,29 @@ export default {
     },
     methods: {
         async getProducts(page = 1) {
-            axios.get(`/api/products?page=${page}`).then(response => {
+            this.currentPage = page;
+            axios.get(`/api/products?page=${page}`).then((response) => {
                 this.products = response.data.data
             }).catch(({ response })=>{
-                console.error(response)
+                alert(error.message)
             })
         },
         async setAvailability(id) {
-            let url = `/api/products/${id}/stock`;
-            await axios.post(url).then((response) => {
+            await axios.post(`/api/products/${id}/stock`).then((response) => {
                 if (response.status === 200) {
-                    this.getProducts()
+                    this.getProducts(this.currentPage)
                 }
             }).catch(error => {
-                console.log(error)
+                alert(error.message)
+            })
+        },
+        async deleteProduct(id) {
+            await axios.delete(`/api/products/${id}`).then((response) => {
+                if (response.status === 200) {
+                    this.getProducts(this.currentPage)
+                }
+            }).catch(error => {
+                alert(error.message)
             })
         }
     }
