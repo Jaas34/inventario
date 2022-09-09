@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::query()->paginate(50);
+        $products = Product::query()->orderBy('id')->paginate(50);
         return $this->successResponse('Acción realizada con éxito', ['data' => $products]);
     }
 
@@ -63,5 +63,23 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Change availability of a product in stock
+     * if the stock change to false the quantity sill be zero
+     * @param Product $product
+     * @return JsonResponse
+     */
+    public function setWithoutExistence(Product $product)
+    {
+        if ($product->stock == false)
+            return $this->successResponse('El producto se encuentra sin inventario');
+
+        $product->stock = !$product->stock;
+        $product->quantity = 0;
+        $product->save();
+
+        return $this->successResponse('Acción realizada con éxito', ['data' => $product]);
     }
 }

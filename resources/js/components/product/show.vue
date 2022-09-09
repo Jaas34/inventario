@@ -14,8 +14,8 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">SKU: {{product.sku}}</li>
-                    <li class="list-group-item">{{ product.stock ? 'Con existencias' : 'Sin existencias'}} - {{product.quantity}} unidades</li>
-                    <li class="list-group-item">Precio: {{ product.price }}</li>
+                    <li class="list-group-item">{{ product.stock ? 'Disponible' : 'No disponible'}} - {{product.quantity}} unidades</li>
+                    <li class="list-group-item">Precio: ${{ product.price }}</li>
                     <li class="list-group-item">Calificación: 5</li>
                     <li class="list-group-item">Categorías: {{product.categories}}</li>
                 </ul>
@@ -38,9 +38,7 @@
         },
         methods: {
             async getProductById() {
-                let url = `http://127.0.0.1:8000/api/products/${this.$route.params.id}`;
-
-                await axios.get(url).then((response) => {
+                await axios.get(`/api/products/${this.$route.params.id}`).then((response) => {
                     if (response.status === 200) {
                         this.product = response.data.data
                     }

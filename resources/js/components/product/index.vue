@@ -27,8 +27,10 @@
                         <td>{{ product.sku }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.categories }}</td>
-                        <td><span v-if="product.stock">En existencia</span>
-                            <span v-else>Sin existencia</span></td>
+                        <td>
+                            <span v-if="product.stock">Disponible</span>
+                            <span v-else>No disponible</span>
+                        </td>
                         <td>5</td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group">
@@ -42,7 +44,7 @@
                                         </router-link>
                                     </li>
                                     <li><a class="dropdown-item" href="#">Editar</a></li>
-                                    <li><a class="dropdown-item" href="#">Cambiar existencia</a></li>
+                                    <li><a class="dropdown-item" :class="{ disabled : !product.stock }" href="#" v-on:click="setAvailability(product.id)">Marcar sin inventario</a></li>
                                     <li><a class="dropdown-item" href="#">Eliminar</a></li>
                                 </ul>
                             </div>
@@ -81,6 +83,16 @@ export default {
                 this.products = response.data.data
             }).catch(({ response })=>{
                 console.error(response)
+            })
+        },
+        async setAvailability(id) {
+            let url = `/api/products/${id}/stock`;
+            await axios.post(url).then((response) => {
+                if (response.status === 200) {
+                    this.getProducts()
+                }
+            }).catch(error => {
+                console.log(error)
             })
         }
     }
