@@ -77,7 +77,7 @@
         },
         mounted() {
             this.setInitialValues(),
-            this.getCategories();
+            this.getCategories()
         },
         methods: {
             setInitialValues() {
@@ -107,7 +107,7 @@
                 let url = 'http://127.0.0.1:8000/api/products';
                 await axios.post(url, formData).then((response) => {
                     if (response.status === 200) {
-                        this.this.setInitialValues()
+                        this.setInitialValues()
                     }
                 }).catch(error => {
                     console.log(error)

@@ -1,10 +1,84 @@
 <template>
-    Listado de productos
 
-    <router-link class="nav-link" to="/create">Crear Producto</router-link>
+    <section class="py-5 container">
+        <div class="row">
+            <h4 class="mb-3">Listado de productos</h4>
+
+            <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                <router-link class="nav-link" to="/create" tag="button">
+                <button class="btn btn-primary me-md-2" type="button">Crear producto</button>
+                </router-link>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Nombre</th>
+                        <th>Categorías</th>
+                        <th>Estado</th>
+                        <th>Calificación</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody v-if="products">
+                    <tr v-for="(product, index) in products.data" :key="index">
+                        <td>{{ product.sku }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.categories }}</td>
+                        <td><span v-if="product.stock">En existencia</span>
+                            <span v-else>Sin existencia</span></td>
+                        <td>5</td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Detalle</a></li>
+                                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                                    <li><a class="dropdown-item" href="#">Cambiar existencia</a></li>
+                                    <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody v-else>
+                    <tr>
+                        <td colspan="3">Sin resultados</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <pagination :data="products" @pagination-change-page="getProducts"/>
+        </div>
+    </section>
 </template>
 <script>
+import pagination from 'laravel-vue-pagination';
 export default {
-    name: 'Index'
+    name: 'Index',
+    components: {
+        pagination
+    },
+    data() {
+        return {
+            products: {}
+        }
+    },
+    mounted() {
+        this.getProducts()
+    },
+    methods: {
+        async getProducts(page = 1) {
+            axios.get(`/api/products?page=${page}`).then(response => {
+                this.products = response.data.data
+            }).catch(({ response })=>{
+                console.error(response)
+            })
+        }
+    }
 }
 </script>

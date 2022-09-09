@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
+     * Get a product list
+     * @return JsonResponse
      */
     public function index()
     {
-        //
+        $products = Product::query()->paginate(50);
+        return $this->successResponse('Acción realizada con éxito', ['data' => $products]);
     }
 
 
