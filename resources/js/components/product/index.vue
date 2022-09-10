@@ -11,7 +11,7 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center table-striped">
                     <thead>
                     <tr>
                         <th>SKU</th>
@@ -28,10 +28,22 @@
                         <td>{{ product.name }}</td>
                         <td>{{ product.categories }}</td>
                         <td>
-                            <span v-if="product.stock">Disponible</span>
-                            <span v-else>No disponible</span>
+                            <span class="badge rounded-pill" :class="product.stock ? 'badge-custom-success' : 'badge-custom-danger'">
+                                {{ product.stock ? 'Disponible' : 'No disponible'}}
+                            </span>
                         </td>
-                        <td>5</td>
+                        <td>
+                            <div class="progress">
+                                <div v-if="product.rating > 0" class="progress-bar bg-warning" role="progressbar"
+                                     aria-valuemin="0" aria-valuemax="5"
+                                     :style="{ 'width': (product.rating*100)/5 + '%' }">
+                                    {{ product.rating }}
+                                </div>
+                                <div style="margin: 0 auto" v-else>
+                                    0
+                                </div>
+                            </div>
+                        </td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,7 +95,7 @@ export default {
             this.currentPage = page;
             axios.get(`/api/products?page=${page}`).then((response) => {
                 this.products = response.data.data
-            }).catch(({ response })=>{
+            }).catch(error =>{
                 alert(error.message)
             })
         },

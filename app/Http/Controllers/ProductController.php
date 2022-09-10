@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductRating;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -88,5 +89,27 @@ class ProductController extends Controller
         $product->save();
 
         return $this->successResponse('Acción realizada con éxito', ['data' => $product]);
+    }
+
+    /**
+     * Set a rating to a product
+     * @param Product $product
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function setRating(Product $product, Request $request)
+    {
+        $this->validateRequest($request->all(), [
+            'rating' => 'required|numeric|min:1|max:5'
+        ]);
+
+        DB::transaction(function () use ($request, $product) {
+            ProductRating::query()->create([
+                'product_id' => $product->id,
+                'rating' => $request->get('rating')
+            ]);
+        });
+
+        return $this->successResponse('Acción realizada con éxito');
     }
 }

@@ -25,6 +25,7 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::get('/', 'index');
     Route::get('/{product}', 'show');
     Route::post('/{product}/stock', 'setWithoutExistence');
+    Route::post('/{product}/rating', 'setRating');
     Route::post('/', 'store');
     Route::delete('/{product}', 'destroy');
 });
