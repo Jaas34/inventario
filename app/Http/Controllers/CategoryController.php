@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers
+ */
 class CategoryController extends Controller
 {
     /**

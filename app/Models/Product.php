@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class Product
+ * @package App\Models
+ */
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
@@ -15,6 +19,16 @@ class Product extends Model
     protected $appends = ['categories', 'rating'];
 
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+
+    static $rules = [
+        'sku'           => 'required',
+        'name'          => 'required',
+        'description'   => 'required',
+        'price'         => 'required|numeric|min:0',
+        'quantity'      => 'required|numeric|min:0',
+        'stock'         => 'required',
+        'category_id'   => 'required'
+    ];
 
     public function categories()
     {

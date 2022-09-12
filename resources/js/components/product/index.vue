@@ -32,17 +32,7 @@
                                 {{ product.stock ? 'Disponible' : 'No disponible'}}
                             </span>
                         </td>
-                        <td>
-                            <div class="progress">
-                                <div v-if="product.rating > 0" class="progress-bar bg-warning" role="progressbar"
-                                     aria-valuemin="0" aria-valuemax="5"
-                                     :style="{ 'width': (product.rating*100)/5 + '%' }">
-                                    {{ product.rating }}
-                                </div>
-                                <div style="margin: 0 auto" v-else>
-                                    0
-                                </div>
-                            </div>
+                        <td v-html="starRating(product.rating)">
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group">
@@ -76,6 +66,7 @@
 </template>
 <script>
 import pagination from 'laravel-vue-pagination';
+import { starRating } from '../common/global'
 export default {
     name: 'Index',
     components: {
@@ -91,6 +82,7 @@ export default {
         this.getProducts()
     },
     methods: {
+        starRating,
         async getProducts(page = 1) {
             this.currentPage = page;
             axios.get(`/api/products?page=${page}`).then((response) => {

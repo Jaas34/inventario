@@ -8,6 +8,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class ProductController
+ * @package App\Http\Controllers
+ */
 class ProductController extends Controller
 {
     /**
@@ -20,7 +24,6 @@ class ProductController extends Controller
         return $this->successResponse('Acción realizada con éxito', ['data' => $products]);
     }
 
-
     /**
      * Store a new Product
      * @param Request $request
@@ -29,14 +32,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $this->validateRequest($data, [
-            'sku'           => 'required',
-            'name'          => 'required',
-            'description'   => 'required',
-            'price'         => 'required|numeric|min:0',
-            'quantity'      => 'required|numeric|min:0',
-            'stock'         => 'required',
-        ]);
+        $this->validateRequest($data, Product::$rules);
 
         DB::transaction(function () use ($data) {
             $product = Product::query()->create($data);
